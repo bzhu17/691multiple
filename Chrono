@@ -41,3 +41,12 @@ int main()
     aa(1);
     aa(1, 2);
 }
+
+void aa(int a)
+{
+	cout << 1 << endl;
+}
+void aa(int a, int b)
+{
+	cout << 2 << endl;
+}
