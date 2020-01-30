@@ -1,0 +1,52 @@
+class MyClass {
+public:
+	int value;
+	MyClass(){}
+	MyClass(int i):value(i){}
+	void f1(int& a, int b) {
+		value++;
+		a++;
+		cout << a * b << endl;
+	}
+};
+
+class MyFunctor {
+public:
+	int value;
+	MyFunctor(){}
+	MyFunctor(int i):value(i){}
+	void operator()(int& a, int b) {
+		value++;
+		a++;
+		cout << a + b << endl;
+	}
+};
+
+int main()
+{
+  	int x{ 10 }, y{ 20 };
+    MyClass m1(100);
+    thread t1{&MyClass::f1, ref(m1), ref(x), y};// m1 will get 100,&m1 will get 101
+                          //&m1 will also work for call(pass) by ref
+    //t1.detach();
+    this_thread::sleep_for(chrono::seconds(1));
+
+    cout << "value=" << m1.value << " " << "x= " << x << endl;
+    t1.join();
+
+    MyFunctor m2(1000);
+    thread t2{ m2,ref(x),y };//m2 call by value or ref(m2) call by ref
+    t2.join();
+    cout << "value=" << m2.value << " " << "x= " << x << endl;
+
+    MyClass* p1;// = new MyClass(500);
+    thread t3{&MyClass::f1,ref(*p1),ref(x),y};//will call by ref,*p1 will call by value
+    //thread t3{ &f1,ref(*p1),x,y };
+    t3.join();
+    //p1 and ref(*p1) will both give you call by ref,*p1 will give you call by value
+
+    cout << "value= " << p1->value << " " << "x= " << x << endl;
+
+
+    return 1;
+}
