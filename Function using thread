@@ -24,7 +24,7 @@ public:
 
 int main()
 {
-  	int x{ 10 }, y{ 20 };
+    int x{ 10 }, y{ 20 };
     MyClass m1(100);
     thread t1{&MyClass::f1, ref(m1), ref(x), y};// m1 will get 100,&m1 will get 101
                           //&m1 will also work for call(pass) by ref
@@ -42,6 +42,11 @@ int main()
     MyClass* p1;// = new MyClass(500);
     thread t3{&MyClass::f1,ref(*p1),ref(x),y};//will call by ref,*p1 will call by value
     //thread t3{ &f1,ref(*p1),x,y };
+    
+    //指针类型名  指针名 = &类名::成员函数名;
+
+    //注意：这里的这个&符号是比较重要的：不加&，编译器会认为是在这里调用成员函数，所以需要给出参数列表，否则会报错；加了&，才认为是要获取函数指针。这是C++专门做了区别对待
+    
     t3.join();
     //p1 and ref(*p1) will both give you call by ref,*p1 will give you call by value
 
