@@ -1,0 +1,48 @@
+bool max(int a, int b, bool(*F)(int a, int b)) { return F(a, b); }
+//functor, function pointer, lambda function, etc.
+
+bool f1(int a, int b) { return a >b; }
+
+class MyComparator {
+public:
+	bool operator()(int a, int b) { return a % 2 > b % 2; }
+};
+
+int max(int a, int b, function<bool(int, int)> F)
+{
+	return F(a, b) ? a : b;
+}
+
+template<class T> T Square(T a) { return a * a; }
+
+template<class T> int min(int a, int b, T func) {
+	return func(a, b) ? b : a;
+}
+
+int main()
+{
+    list<int> l1{ 4,7,2,5,1 };
+
+    MyComparator f2;
+    cout << f2(100, 201) << endl;
+
+    l1.sort(f2);
+
+    l1.sort([](int a, int b) {return a > b; });
+
+    l1.sort(MyComparator());//Anonymous functor -- functor without a name
+    //bool(*F)(int a, int b);
+    //F = f1;
+
+    cout << max(100, 200, f1)<<endl; //&f1 may also work
+    cout << max(100, 200, [](int a, int b) {return a > b; })<<endl;
+    cout << Square(5) << " " << Square(3.5) << endl;
+
+    thread t1(f1, 1000, 2000);
+    thread t2(f2,1000,2000);
+    thread t3([](int a, int b) {return a % 3 > b % 3; }, 1000, 2000);
+    this_thread::sleep_for(chrono::milliseconds(100));
+    t1.join();
+    t2.join();
+    t3.join();
+}
