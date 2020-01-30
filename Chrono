@@ -1,0 +1,43 @@
+void aa(int a);
+void aa(int a, int b);
+
+class aaa {
+public:
+	bool operator()(int a, int b) { return a > b; }
+	int abc();
+};
+int aaa::abc() {
+	return 1;
+}
+
+/*
+Chrono
+
+system_clock
+steady_clock
+high_resolution_clock
+
+duration -- duration<T,ration<1,1>> 1/1 second, 60/1 minute, 3600/1 hour  T could be int, double ...
+time_point
+
+*/
+
+int main()
+{
+    chrono::system_clock::time_point tbegin = chrono::system_clock::now();
+    this_thread::sleep_for(chrono::seconds(1));
+    this_thread::sleep_until(chrono::system_clock::now()+chrono::seconds(3));
+    chrono::system_clock::time_point tend = chrono::system_clock::now();
+    chrono::system_clock::duration elapse = tend - tbegin;
+
+    cout << chrono::duration_cast<chrono::microseconds>(elapse).count() << endl;
+
+    cout << chrono::steady_clock::period::num << "/" << chrono::steady_clock::period::den << endl;
+
+    cout << this_thread::get_id() << endl;
+    chrono::duration<double,ratio<1,1>> d1(15);
+    cout << d1.count() << endl;
+    cout << chrono::duration_cast<chrono::nanoseconds>(d1).count();
+    aa(1);
+    aa(1, 2);
+}
