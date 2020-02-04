@@ -1,0 +1,13 @@
+mutex m1,m2;
+...
+lock_guard<mutex> lock1(m1);              //implies m1.lock()
+lock_guard<mutex> lock1(m1,defer_lock);   //does not compete for the lock
+//lock1 is unlocked, m1 stays as it is
+lock_guard<mutex> lock1(m1,try_to_lock);
+
+lock1.lock();//but it can not unlock because defer_lock will not lock it
+lock1.unlock();//compile time error!
+
+lock_guard<mutex> lock1(m2,try_to_lock);
+
+condition_variable cv1,cv2;
