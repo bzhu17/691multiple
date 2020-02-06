@@ -1,0 +1,17 @@
+#include <iostream>
+#include <thread>
+#include <mutex>
+#include <string>
+#include <condition_variable>
+
+std::mutex m1;
+std::mutex m2,m3,m4;
+int main()
+{
+  std::unique_lock<std::mutex> lock1(m1);//m1.lock(); if m1 is currently locked, there will be blocking
+  std::unique_lock<std::mutex> lock2(m2,std::defer_lock);//m2.unlock();do nothing
+  //lock3(m3,std::try_to_lock) if m3 is unlocked, then lock it;if m3 is locked,do nothing and proceed(no blocking)
+  //lock4(m4,std::adopt_lock) behave like defer lock assuming that m4
+  
+  std::condition_variable cv1;
+}
